@@ -5,12 +5,12 @@
   "discordText": "DISCORD: https://discord.gg/3aaNQxjrtt",
   "websiteText": "WEBSITE: COMING SOON",
   "backgrounds": [
-    "assets/bg1.svg"
+    "assets/bg1.png"
   ],
   "gallery": [
-    "assets/download.jiff",
-    "assets/download_1.jiff",
-    "assets/download_2.jiff"
+    "assets/download.png",
+    "assets/download_1.png",
+    "assets/download_2.png"
   ],
   "galleryIntervalMs": 4500,
   "rules": [
