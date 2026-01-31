@@ -8,9 +8,9 @@
     "assets/bg1.svg"
   ],
   "gallery": [
-    "assets/scene_bridge.svg",
-    "assets/scene_hangar.svg",
-    "assets/scene_corridor.svg"
+    "assets/download.jiff",
+    "assets/download_1.jiff",
+    "assets/download_2.jiff"
   ],
   "galleryIntervalMs": 4500,
   "rules": [
@@ -21,17 +21,17 @@
     "Use voice/chat appropriately; no harassment."
   ],
   "staff": [
-    {
-      "name": "High Command",
-      "role": "Server Leadership"
+     {
+      "name": "Welsh",
+      "role": "Owner"
     },
     {
-      "name": "ISB",
-      "role": "Security & Investigations"
+      "name": "Bradd",
+      "role": "Owner"
     },
     {
-      "name": "Support Team",
-      "role": "Player Assistance"
+      "name": "Darth Vader",
+      "role": "Player Assistance (Not recommended to go to him for assistance though!)"
     }
   ],
   "tips": [

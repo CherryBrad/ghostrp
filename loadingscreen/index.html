@@ -1,101 +1,52 @@
 <!doctype html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Loading…</title>
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
-  <link rel="stylesheet" href="assets/style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Loading…</title>
+<link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
-  <div id="bg" aria-hidden="true">
-    <div class="bgLayer" id="bgA"></div>
-    <div class="bgLayer" id="bgB"></div>
+
+<div id="bg"></div>
+
+<div id="wrap" class="wrap">
+
+<header class="header">
+  <div class="left">
+    <img src="assets/emblem.png" class="emblem">
+    <div>
+      <h1 id="serverName"></h1>
+      <div id="tagline" class="tagline"></div>
+    </div>
   </div>
+  <div class="right">
+    <div id="steam">SteamID64: —</div>
+    <div id="last">Last connected: —</div>
+  </div>
+</header>
 
-  <main class="wrap">
-    <header class="top">
-      <div class="brand">
-        <img class="emblem" src="assets/emblem.svg" alt="Emblem">
-        <div class="titles">
-          <h1 id="serverName">Imperial RP</h1>
-          <div id="tagline" class="tagline">Establishing secure channel…</div>
-        </div>
-      </div>
+<section class="status">
+  <div class="bar"><div id="fill"></div></div>
+  <div id="percent">0%</div>
+  <div id="fileText">Preparing…</div>
+  <div class="links">
+    <span id="discordText"></span>
+    <span id="websiteText"></span>
+  </div>
+</section>
 
-      <div class="info">
-        <div class="pill" id="steamPill">SteamID64: —</div>
-        <div class="pill" id="lastPill">Last connected: —</div>
-      </div>
-    </header>
+<div class="grid">
+  <section class="panel gallery"><h2>Imperial Uplink</h2><img id="galleryImg"></section>
+  <section class="panel"><h2>Rules</h2><ol id="rules"></ol></section>
+  <section class="panel"><h2>Staff</h2><div id="staff"></div></section>
+  <section class="panel wide"><h2>Tips</h2><ul id="tips"></ul></section>
+</div>
 
-    <section class="statusCard">
-      <div class="statusHead">
-        <div class="kicker">Deployment status</div>
-        <div class="rightText" id="rightText">Preparing…</div>
-      </div>
+<footer class="foot">Property of the Galactic Empire • Authorised Personnel Only</footer>
 
-      <div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100">
-        <div class="fill" id="fill"></div>
-      </div>
+</div>
 
-      <div class="barMeta">
-        <div class="pct" id="pct">0%</div>
-        <div class="msg" id="statusText">Synchronising fleet data…</div>
-      </div>
-
-      <div class="tinyLine">
-        <span id="discordText">DISCORD: discord.gg/YOURINVITE</span>
-        <span class="sep">•</span>
-        <span id="websiteText">WEBSITE: example.com</span>
-      </div>
-    </section>
-
-    <section class="panels">
-      <section class="panel gallery" aria-label="Imperial scenes">
-        <div class="panelTitle">
-          <h2>Imperial Uplink</h2>
-          <div class="sub">Operational visuals</div>
-        </div>
-        <div class="galleryFrame">
-          <img id="galleryImg" alt="Scene" />
-          <div class="galleryOverlay"></div>
-        </div>
-        <div class="galleryMeta" id="galleryMeta">Loading visuals…</div>
-      </section>
-
-      <section class="panel" aria-label="Rules">
-        <div class="panelTitle">
-          <h2>Rules</h2>
-          <div class="sub">Read while content downloads</div>
-        </div>
-        <ol id="rulesList" class="list"></ol>
-      </section>
-
-      <section class="panel" aria-label="Staff">
-        <div class="panelTitle">
-          <h2>Staff</h2>
-          <div class="sub">Support channels are on Discord</div>
-        </div>
-        <div id="staffList" class="staff"></div>
-      </section>
-
-      <section class="panel wide" aria-label="Tips">
-        <div class="panelTitle">
-          <h2>Tips</h2>
-          <div class="sub">Useful notes for new recruits</div>
-        </div>
-        <ul id="tipsList" class="bullets"></ul>
-      </section>
-    </section>
-
-    <footer class="foot">
-      <div class="fine">Property of the Galactic Empire • Authorised Personnel Only</div>
-    </footer>
-  </main>
-
-  <script src="assets/app.js"></script>
+<script src="assets/app.js"></script>
 </body>
 </html>
