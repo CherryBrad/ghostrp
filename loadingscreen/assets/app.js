@@ -1,195 +1,227 @@
-(async function () {
-  // ---- Load config.json ----
-  const cfg = await fetch('./config.json', { cache: 'no-store' })
-    .then(r => r.ok ? r.json() : null)
-    .catch(() => null);
+/**
+ * Imperial RP Loading Screen (GMod)
+ * Key fix vs v1:
+ * - Define GMod callbacks immediately (not after async fetch),
+ *   so SteamID64 isn't missed if GameDetails fires early.
+ */
 
-  const config = cfg || {
-    serverName: "Imperial RP",
-    tagline: "Establishing secure channel…",
-    accentColor: "#d32f2f",
-    discordInviteUrl: "https://discord.gg/YOURINVITE",
-    backgroundVideo: "",
-    showMusic: false,
-    musicFile: "assets/music.mp3",
-    rules: [],
-    staff: [],
-    tips: []
+(function () {
+  // ----------------------------
+  // State captured from GMod callbacks
+  // ----------------------------
+  let gmod = {
+    steamid: null,
+    totalFiles: 0,
+    neededFiles: 0,
+    currentFile: "",
+    status: ""
   };
 
-  // ---- Apply config ----
-  document.title = `${config.serverName || "Loading"}…`;
-  const root = document.documentElement;
-  if (config.accentColor) root.style.setProperty('--accent', config.accentColor);
+  // ----------------------------
+  // DOM refs (lazy)
+  // ----------------------------
+  function $(id){ return document.getElementById(id); }
 
-  const sn = document.getElementById('serverName');
-  const tg = document.getElementById('tagline');
-  sn.textContent = config.serverName || "Imperial RP";
-  tg.textContent = config.tagline || "Establishing secure channel…";
+  function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
 
-  const discordBtn = document.getElementById('discordBtn');
-  discordBtn.href = config.discordInviteUrl || "#";
-
-  // Rules
-  const rulesList = document.getElementById('rulesList');
-  (config.rules || []).forEach((r) => {
-    const li = document.createElement('li');
-    li.textContent = r;
-    rulesList.appendChild(li);
-  });
-
-  // Staff
-  const staffList = document.getElementById('staffList');
-  (config.staff || []).forEach((s) => {
-    const wrap = document.createElement('div');
-    wrap.className = 'staffItem';
-
-    const top = document.createElement('div');
-    top.className = 'staffTop';
-
-    const left = document.createElement('div');
-    const name = document.createElement('div');
-    name.className = 'staffName';
-    name.textContent = s.name || "Staff";
-
-    const role = document.createElement('div');
-    role.className = 'staffRole';
-    role.textContent = s.role || "";
-
-    left.appendChild(name);
-    left.appendChild(role);
-
-    const right = document.createElement('div');
-    right.className = 'staffDiscord';
-    right.textContent = s.discord || "";
-
-    top.appendChild(left);
-    top.appendChild(right);
-
-    wrap.appendChild(top);
-    staffList.appendChild(wrap);
-  });
-
-  // Tips
-  const tipsList = document.getElementById('tipsList');
-  (config.tips || []).forEach((t) => {
-    const li = document.createElement('li');
-    li.textContent = t;
-    tipsList.appendChild(li);
-  });
-
-  // Optional background video
-  const bgVideo = document.getElementById('bgVideo');
-  if (config.backgroundVideo && typeof config.backgroundVideo === 'string' && config.backgroundVideo.trim() !== "") {
-    bgVideo.src = config.backgroundVideo;
-    bgVideo.style.display = 'block';
+  function applySteam(){
+    const el = $("steamPill");
+    if (!el) return;
+    el.textContent = "SteamID64: " + (gmod.steamid || "—");
   }
 
-  // Optional music
-  if (config.showMusic) {
-    const audio = document.createElement('audio');
-    audio.src = config.musicFile || "assets/music.mp3";
-    audio.autoplay = true;
-    audio.loop = true;
-    audio.volume = 0.35;
-    document.body.appendChild(audio);
-  }
-
-  // Panel toggle (handy on smaller screens)
-  const toggleBtn = document.getElementById('togglePanels');
-  let collapsed = false;
-  toggleBtn.addEventListener('click', () => {
-    collapsed = !collapsed;
-    document.getElementById('rulesCard').style.display = collapsed ? 'none' : '';
-    document.getElementById('staffCard').style.display = collapsed ? 'none' : '';
-    document.getElementById('tipsCard').style.display = collapsed ? 'none' : '';
-    toggleBtn.textContent = collapsed ? 'Show Panels' : 'Panels';
-  });
-
-  // ---- Last connected (per device/browser) ----
-  const LAST_KEY = "imperial_last_connected";
-  const last = localStorage.getItem(LAST_KEY);
-  document.getElementById('lastPill').textContent =
-    "Last connected: " + (last ? last : "First time on this device");
-  localStorage.setItem(LAST_KEY, new Date().toLocaleString("en-GB"));
-
-  // ---- Loading % (GMod hooks) ----
-  let totalFiles = 0;
-  let neededFiles = 0;
-  let currentFile = "";
-
-  const fill = document.getElementById('fill');
-  const pct = document.getElementById('pct');
-  const file = document.getElementById('file');
-  const statusText = document.getElementById('statusText');
-
-  function clamp(n, min, max) { return Math.max(min, Math.min(max, n)); }
-
-  function setProgress(p) {
+  function setProgress(p){
+    const fill = $("fill");
+    const pct = $("pct");
+    if (!fill || !pct) return;
     p = clamp(p, 0, 100);
     fill.style.width = p.toFixed(0) + "%";
     pct.textContent = p.toFixed(0) + "%";
   }
 
-  function refreshFileText() {
-    if (totalFiles > 0) {
-      const done = clamp(totalFiles - neededFiles, 0, totalFiles);
-      file.textContent = `${done}/${totalFiles} files • ${currentFile || "Working…"}`;
-      setProgress((done / totalFiles) * 100);
+  function refreshRightText(){
+    const el = $("rightText");
+    if (!el) return;
+
+    if (gmod.totalFiles > 0) {
+      const done = clamp(gmod.totalFiles - gmod.neededFiles, 0, gmod.totalFiles);
+      el.textContent = `${done}/${gmod.totalFiles} files • ${gmod.currentFile ? gmod.currentFile : "Working…"}`;
+      setProgress((done / gmod.totalFiles) * 100);
     } else {
-      file.textContent = currentFile ? `Downloading: ${currentFile}` : "Preparing…";
+      el.textContent = gmod.currentFile ? `Downloading: ${gmod.currentFile}` : "Preparing…";
     }
   }
 
-  // Expose GMod callbacks on window
+  function refreshStatus(){
+    const el = $("statusText");
+    if (!el) return;
+    if (gmod.status) el.textContent = gmod.status;
+  }
+
+  // ----------------------------
+  // Last connected (per device)
+  // ----------------------------
+  (function initLastConnected(){
+    const LAST_KEY = "imperial_last_connected";
+    const el = $("lastPill");
+    const last = localStorage.getItem(LAST_KEY);
+    if (el) el.textContent = "Last connected: " + (last ? last : "First time on this device");
+    localStorage.setItem(LAST_KEY, new Date().toLocaleString("en-GB"));
+  })();
+
+  // ----------------------------
+  // Define GMod callbacks *immediately*
+  // ----------------------------
   window.GameDetails = function (servername, serverurl, mapname, maxplayers, steamid, gamemode) {
-    // Show steamid64
-    document.getElementById('steamPill').textContent = "SteamID64: " + (steamid || "—");
-    // Also update title if server reports name
-    if (servername && typeof servername === "string" && servername.trim() !== "") {
-      sn.textContent = servername;
-      document.title = `${servername}…`;
+    gmod.steamid = steamid || null;
+    applySteam();
+
+    // Optional: if server reports a name, reflect it
+    if (servername && $("serverName")) {
+      $("serverName").textContent = servername;
+      document.title = servername + "…";
     }
   };
 
   window.SetFilesTotal = function (total) {
-    totalFiles = Number(total) || 0;
-    refreshFileText();
+    gmod.totalFiles = Number(total) || 0;
+    refreshRightText();
   };
 
   window.SetFilesNeeded = function (needed) {
-    neededFiles = Number(needed) || 0;
-    refreshFileText();
+    gmod.neededFiles = Number(needed) || 0;
+    refreshRightText();
   };
 
   window.DownloadingFile = function (filename) {
-    currentFile = filename || "";
-    refreshFileText();
+    gmod.currentFile = filename || "";
+    refreshRightText();
   };
 
   window.SetStatusChanged = function (status) {
-    if (status) statusText.textContent = status;
+    if (status) gmod.status = status;
+    refreshStatus();
   };
 
-  // Initial
-  setProgress(0);
-  refreshFileText();
+  // ----------------------------
+  // Load config + build panels
+  // ----------------------------
+  async function loadConfig(){
+    try{
+      const r = await fetch("./config.json", { cache: "no-store" });
+      if (!r.ok) return null;
+      return await r.json();
+    }catch(e){ return null; }
+  }
 
-  // Rotate flavour status if engine doesn't provide
-  const messages = [
+  function setBgLayers(backgrounds){
+    const a = $("bgA");
+    const b = $("bgB");
+    if (!a || !b) return;
+
+    const list = (backgrounds || []).filter(Boolean);
+    if (list.length === 0) return;
+
+    let idx = 0;
+    a.style.backgroundImage = `url('${list[0]}')`;
+    if (list.length === 1) return;
+
+    // Cross-fade between backgrounds every 8s
+    setInterval(() => {
+      const next = (idx + 1) % list.length;
+      b.style.backgroundImage = `url('${list[next]}')`;
+      b.animate([{opacity:0},{opacity:0.70}], {duration:1200, fill:"forwards", easing:"ease"});
+      a.animate([{opacity:0.70},{opacity:0}], {duration:1200, fill:"forwards", easing:"ease"});
+      // swap roles
+      setTimeout(() => {
+        a.style.backgroundImage = b.style.backgroundImage;
+        a.style.opacity = "0.70";
+        b.style.opacity = "0";
+        idx = next;
+      }, 1250);
+    }, 8000);
+  }
+
+  function buildLists(cfg){
+    if (!cfg) return;
+
+    if (cfg.accentColor) document.documentElement.style.setProperty("--accent", cfg.accentColor);
+
+    if ($("serverName")) $("serverName").textContent = cfg.serverName || "Imperial RP";
+    if ($("tagline")) $("tagline").textContent = cfg.tagline || "Establishing secure channel…";
+    document.title = (cfg.serverName || "Loading") + "…";
+
+    if ($("discordText")) $("discordText").textContent = cfg.discordText || "";
+    if ($("websiteText")) $("websiteText").textContent = cfg.websiteText || "";
+
+    // rules
+    const rulesList = $("rulesList");
+    if (rulesList) {
+      rulesList.innerHTML = "";
+      (cfg.rules || []).forEach(r => {
+        const li = document.createElement("li");
+        li.textContent = r;
+        rulesList.appendChild(li);
+      });
+    }
+
+    // staff
+    const staffList = $("staffList");
+    if (staffList) {
+      staffList.innerHTML = "";
+      (cfg.staff || []).forEach(s => {
+        const w = document.createElement("div");
+        w.className = "staffItem";
+        const name = document.createElement("div");
+        name.className = "staffName";
+        name.textContent = s.name || "Staff";
+        const role = document.createElement("div");
+        role.className = "staffRole";
+        role.textContent = s.role || "";
+        w.appendChild(name);
+        w.appendChild(role);
+        staffList.appendChild(w);
+      });
+    }
+
+    // tips
+    const tipsList = $("tipsList");
+    if (tipsList) {
+      tipsList.innerHTML = "";
+      (cfg.tips || []).forEach(t => {
+        const li = document.createElement("li");
+        li.textContent = t;
+        tipsList.appendChild(li);
+      });
+    }
+
+    // background
+    setBgLayers(cfg.backgrounds);
+  }
+
+  // Flavour status if engine stays silent
+  const fallbackMsgs = [
     "Synchronising fleet data…",
     "Decrypting tactical channels…",
-    "Preparing garrison deployment…",
     "Verifying clearance codes…",
-    "Establishing uplink integrity…",
-    "Awaiting command transfer…"
+    "Preparing garrison deployment…",
+    "Establishing uplink integrity…"
   ];
-  let i = 0;
+  let f = 0;
   setInterval(() => {
-    // Only rotate if the engine hasn't overwritten recently
-    if (!statusText.textContent || statusText.textContent === messages[i] || statusText.textContent.includes("…")) {
-      statusText.textContent = messages[i];
-      i = (i + 1) % messages.length;
+    if (!gmod.status) {
+      gmod.status = fallbackMsgs[f];
+      refreshStatus();
+      f = (f + 1) % fallbackMsgs.length;
     }
   }, 2600);
+
+  // Initial UI refreshes
+  applySteam();
+  refreshRightText();
+  refreshStatus();
+  setProgress(0);
+
+  // Boot
+  loadConfig().then(buildLists);
 })();

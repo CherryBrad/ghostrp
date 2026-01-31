@@ -1,11 +1,12 @@
 {
-  "serverName": "GhostRP",
+  "serverName": "Ghost RP",
   "tagline": "Coming Soon \u2022 Establishing secure channel",
   "accentColor": "#d32f2f",
-  "discordInviteUrl": "https://discord.gg/3aaNQxjrtt",
-  "backgroundVideo": "",
-  "showMusic": false,
-  "musicFile": "assets/music.mp3",
+  "discordText": "https://discord.gg/3aaNQxjrtt",
+  "websiteText": "WEBSITE: Coming Soon",
+  "backgrounds": [
+    "assets/bg1.svg"
+  ],
   "rules": [
     "Respect all players and staff.",
     "No cheating, exploiting, or evasion.",
@@ -16,23 +17,20 @@
   "staff": [
     {
       "name": "High Command",
-      "role": "Server Leadership",
-      "discord": "@HighCommand"
+      "role": "Server Leadership"
     },
     {
       "name": "ISB",
-      "role": "Security & Investigations",
-      "discord": "@ISB"
+      "role": "Security & Investigations"
     },
     {
       "name": "Support Team",
-      "role": "Player Assistance",
-      "discord": "@Support"
+      "role": "Player Assistance"
     }
   ],
   "tips": [
-    "First time here? Join the Discord for updates and whitelist information.",
-    "Read the rules panel while the server content downloads.",
-    "If you experience missing textures, verify your GMod files and rejoin."
+    "Join the Discord for updates, whitelist information, and announcements.",
+    "If you see missing textures, verify GMod files and rejoin.",
+    "Read the rules while content downloads."
   ]
 }
