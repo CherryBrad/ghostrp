@@ -163,6 +163,7 @@ body{
 .grid{
   margin-top: 12px;
   display:grid;
+  grid-auto-flow: row;
   gap: 12px;
   grid-template-columns: 1.5fr 1fr;
   grid-auto-rows: minmax(140px, auto);
@@ -171,7 +172,6 @@ body{
 .panelHead h2{margin:0; font-size: 18px; letter-spacing: .8px;}
 .sub{margin-top:4px; font-size: 13px; color: var(--muted);}
 
-.wide{grid-column: 1 / -1;}
 
 .mediaFrame{
   margin-top: 10px;
