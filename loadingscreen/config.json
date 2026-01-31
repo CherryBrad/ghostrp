@@ -2,11 +2,17 @@
   "serverName": "Ghost RP",
   "tagline": "Coming Soon \u2022 Establishing secure channel",
   "accentColor": "#d32f2f",
-  "discordText": "https://discord.gg/3aaNQxjrtt",
-  "websiteText": "WEBSITE: Coming Soon",
+  "discordText": "DISCORD: https://discord.gg/3aaNQxjrtt",
+  "websiteText": "WEBSITE: COMING SOON",
   "backgrounds": [
     "assets/bg1.svg"
   ],
+  "gallery": [
+    "assets/scene_bridge.svg",
+    "assets/scene_hangar.svg",
+    "assets/scene_corridor.svg"
+  ],
+  "galleryIntervalMs": 4500,
   "rules": [
     "Respect all players and staff.",
     "No cheating, exploiting, or evasion.",

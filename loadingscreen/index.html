@@ -4,12 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Loading…</title>
-
-  <!-- Cache-busting -->
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-
   <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
@@ -21,7 +18,7 @@
   <main class="wrap">
     <header class="top">
       <div class="brand">
-        <div class="mark" aria-hidden="true"></div>
+        <img class="emblem" src="assets/emblem.svg" alt="Emblem">
         <div class="titles">
           <h1 id="serverName">Imperial RP</h1>
           <div id="tagline" class="tagline">Establishing secure channel…</div>
@@ -57,6 +54,18 @@
     </section>
 
     <section class="panels">
+      <section class="panel gallery" aria-label="Imperial scenes">
+        <div class="panelTitle">
+          <h2>Imperial Uplink</h2>
+          <div class="sub">Operational visuals</div>
+        </div>
+        <div class="galleryFrame">
+          <img id="galleryImg" alt="Scene" />
+          <div class="galleryOverlay"></div>
+        </div>
+        <div class="galleryMeta" id="galleryMeta">Loading visuals…</div>
+      </section>
+
       <section class="panel" aria-label="Rules">
         <div class="panelTitle">
           <h2>Rules</h2>
@@ -84,7 +93,6 @@
 
     <footer class="foot">
       <div class="fine">Property of the Galactic Empire • Authorised Personnel Only</div>
-      <div class="fine muted">If you see a blank screen, your loading URL is unreachable. Test it in a browser first.</div>
     </footer>
   </main>
 
