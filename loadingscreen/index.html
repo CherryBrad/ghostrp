@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Loading…</title>
+
+  <!-- Cache-busting for Pages/clients -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <div id="bg">
+    <video id="bgVideo" autoplay muted loop playsinline style="display:none;"></video>
+  </div>
+
+  <main class="wrap">
+    <header class="hero">
+      <div class="brand">
+        <div class="sigil" aria-hidden="true"></div>
+        <div class="titles">
+          <h1 id="serverName">Imperial RP</h1>
+          <p id="tagline" class="tagline">Establishing secure channel…</p>
+        </div>
+      </div>
+
+      <div class="right">
+        <a id="discordBtn" class="btn" href="#" target="_blank" rel="noreferrer">Join Discord</a>
+        <button id="togglePanels" class="btn ghost" type="button">Panels</button>
+      </div>
+    </header>
+
+    <section class="grid">
+      <section class="card wide" aria-label="Download Progress">
+        <div class="cardHead">
+          <div class="kicker">Deployment status</div>
+          <div class="metaLine">
+            <span class="pill" id="steamPill">SteamID64: —</span>
+            <span class="pill" id="lastPill">Last connected: —</span>
+          </div>
+        </div>
+
+        <div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+          <div class="fill" id="fill"></div>
+        </div>
+
+        <div class="barMeta">
+          <div class="pct" id="pct">0%</div>
+          <div class="file" id="file">Preparing…</div>
+        </div>
+
+        <div class="status" id="statusText">Synchronising fleet data…</div>
+      </section>
+
+      <section class="card" id="rulesCard" aria-label="Rules">
+        <div class="cardTitle">
+          <h2>Rules</h2>
+          <div class="sub">Read while you load</div>
+        </div>
+        <ol id="rulesList" class="list"></ol>
+      </section>
+
+      <section class="card" id="staffCard" aria-label="Staff">
+        <div class="cardTitle">
+          <h2>Staff</h2>
+          <div class="sub">Need help? Ask politely.</div>
+        </div>
+        <div id="staffList" class="staff"></div>
+      </section>
+
+      <section class="card wide" id="tipsCard" aria-label="Tips">
+        <div class="cardTitle">
+          <h2>Tips</h2>
+          <div class="sub">Helpful notes for new recruits</div>
+        </div>
+        <ul id="tipsList" class="bullets"></ul>
+      </section>
+    </section>
+
+    <footer class="foot">
+      <div class="fine">Property of the Galactic Empire • Authorised Personnel Only</div>
+      <div class="fine muted">If you see a blank screen, your loading URL is unreachable. Test it in a browser first.</div>
+    </footer>
+  </main>
+
+  <script src="assets/app.js"></script>
+</body>
+</html>
