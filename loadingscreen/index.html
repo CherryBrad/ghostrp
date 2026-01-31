@@ -1,52 +1,101 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Loading…</title>
-<link rel="stylesheet" href="assets/style.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Loading…</title>
+
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+
+  <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
+  <div id="bg" aria-hidden="true"></div>
+  <div class="overlay" aria-hidden="true"></div>
 
-<div id="bg"></div>
+  <!-- Fixed 1080p canvas that scales perfectly -->
+  <div id="wrap" class="wrap">
+    <header class="header card">
+      <div class="brand">
+        <img src="assets/emblem.png" class="emblem" alt="">
+        <div class="titles">
+          <h1 id="serverName">GHOST RP</h1>
+          <div id="tagline" class="tagline">Establishing secure channel…</div>
+        </div>
+      </div>
 
-<div id="wrap" class="wrap">
+      <div class="pills">
+        <div class="pill" id="steam">SteamID64: —</div>
+        <div class="pill" id="last">Last connected: —</div>
+      </div>
+    </header>
 
-<header class="header">
-  <div class="left">
-    <img src="assets/emblem.png" class="emblem">
-    <div>
-      <h1 id="serverName"></h1>
-      <div id="tagline" class="tagline"></div>
-    </div>
+    <section class="status card">
+      <div class="statusTop">
+        <div class="kicker">DEPLOYMENT STATUS</div>
+        <div class="file" id="fileText">Preparing…</div>
+      </div>
+
+      <div class="bar"><div id="fill" class="fill"></div></div>
+
+      <div class="statusBottom">
+        <div class="pct" id="percent">0%</div>
+        <div class="msg" id="statusMsg">Synchronising fleet data…</div>
+      </div>
+
+      <div class="tinyLine">
+        <span id="discordText"></span>
+        <span class="sep">•</span>
+        <span id="websiteText"></span>
+      </div>
+    </section>
+
+    <main class="grid">
+      <section class="card panel uplink">
+        <div class="panelHead">
+          <h2>Imperial Uplink</h2>
+          <div class="sub">Operational visuals</div>
+        </div>
+
+        <div class="mediaFrame">
+          <img id="galleryImg" alt="">
+          <div id="mediaHint" class="mediaHint">If this image never appears, convert it to JPG/PNG/WebP.</div>
+        </div>
+      </section>
+
+      <section class="card panel">
+        <div class="panelHead">
+          <h2>Rules</h2>
+          <div class="sub">Read while content downloads</div>
+        </div>
+        <ol id="rules" class="list"></ol>
+      </section>
+
+      <section class="card panel">
+        <div class="panelHead">
+          <h2>Staff</h2>
+          <div class="sub">Support channels are on Discord</div>
+        </div>
+        <div id="staff" class="staff"></div>
+      </section>
+
+      <section class="card panel wide">
+        <div class="panelHead">
+          <h2>Tips</h2>
+          <div class="sub">Useful notes for new recruits</div>
+        </div>
+        <ul id="tips" class="bullets"></ul>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <span>Property of the Galactic Empire • Authorised Personnel Only</span>
+      <span class="muted">If you see a blank screen, your loading URL is unreachable. Test it in a browser first.</span>
+    </footer>
   </div>
-  <div class="right">
-    <div id="steam">SteamID64: —</div>
-    <div id="last">Last connected: —</div>
-  </div>
-</header>
 
-<section class="status">
-  <div class="bar"><div id="fill"></div></div>
-  <div id="percent">0%</div>
-  <div id="fileText">Preparing…</div>
-  <div class="links">
-    <span id="discordText"></span>
-    <span id="websiteText"></span>
-  </div>
-</section>
-
-<div class="grid">
-  <section class="panel gallery"><h2>Imperial Uplink</h2><img id="galleryImg"></section>
-  <section class="panel"><h2>Rules</h2><ol id="rules"></ol></section>
-  <section class="panel"><h2>Staff</h2><div id="staff"></div></section>
-  <section class="panel wide"><h2>Tips</h2><ul id="tips"></ul></section>
-</div>
-
-<footer class="foot">Property of the Galactic Empire • Authorised Personnel Only</footer>
-
-</div>
-
-<script src="assets/app.js"></script>
+  <script src="assets/app.js"></script>
 </body>
 </html>
